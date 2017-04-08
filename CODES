@@ -1,0 +1,56 @@
+//ARDUINO HOCAM NIGHT LAMP TV REMOTE 
+
+#include<IRremote.h>
+
+#define Rpin 6 //pins
+#define Gpin 5
+#define Bpin 3
+
+#define Red 2800  //values from tv remote
+#define Green 1424
+#define Blue 3472
+
+IRrecv irsensor(7); //giving a name and designating which pin we connect
+decode_results results;
+
+void setup() {
+  pinMode(3, OUTPUT);
+  pinMode(5, OUTPUT);
+  pinMode(6, OUTPUT);
+  digitalWrite(Rpin, LOW);
+  digitalWrite(Gpin, LOW);
+  digitalWrite(Bpin, LOW);
+  Serial.begin(9600);
+
+  irsensor.enableIRIn(); //
+
+}
+
+void loop() {
+ 
+  if (irsensor.decode(&results))
+  {
+    Serial.println(results.value);
+     if (results.value == Red)
+    {
+      digitalWrite(6, !digitalRead(6));  // when the led is OFF ,it gives HIGH ; when it is ON ,it gives LOW
+    }
+    
+    
+    if (results.value == Green)
+    {
+      digitalWrite(5, !digitalRead(5));
+    }
+  
+    
+     if (results.value == Blue)
+    {
+      digitalWrite(3, !digitalRead(3));
+    }
+   
+    
+ delay(300);
+irsensor.resume();
+  }
+
+}
